@@ -5,12 +5,13 @@ namespace App\Services;
 use Illuminate\Http\JsonResponse;
 use App\Models\Temperature;
 use App\Mail\TemperatureNotification;
-use Mail;
+use Illuminate\Support\Facades\Mail;
+use App\Services\TemperatureObserver;
+use App\Interfaces\ThermostatInterface;
 
-class ThermostatService
+class ThermostatService implements ThermostatInterface
 {
     private $minTemp = 15;
-    private $adminMail = 'myemail@example.com';
 
     public function saveData(array $data): JsonResponse
     {
@@ -19,8 +20,8 @@ class ThermostatService
         $date = $data['date'];
 
         if ($temperature < $this->minTemp) {
-            Mail::to($this->adminMail)
-            ->queue(new TemperatureNotification($deviceId, $temperature));
+            $this->observer = new TemperatureObserver($deviceId, $temperature);
+            $this->observer->sendNotification();
         }
 
         Temperature::create([

@@ -17,4 +17,6 @@ class TemperatureController extends Controller
     {
         return $this->thermostatService->saveData($request->validated());
     }
+
+    // public function getReportByDate();
 }

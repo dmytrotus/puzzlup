@@ -18,8 +18,8 @@ class TemperatureNotification extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        private string $deviceId,
-        private int $temperature
+        public string $deviceId,
+        public int $temperature
     ) {
     }
 

@@ -12,9 +12,9 @@ Potem wejść do projektu w uruchomić komendę
 ```sh
 docker compose up -d
 ```
-Infrastruktura się uruchomi, a baza danych się stworzy automatycznie.
+Infrastruktura się uruchomi, a baza danych się utworzy automatycznie.
 
-Potem nalezy wejśc do kontenera
+Potem należy wejśc do kontenera
 ```sh
 docker exec -it puzzlup-lara-php bash
 ```
@@ -44,6 +44,11 @@ body: {
     temperature: 10 
     date: '14-02-2024 15:12:34'
 }
+```
+
+Zeby uruchomić testy trzeba wykonać polecenie
+```sh
+php artisan test
 ```
 ## Queues 
 
