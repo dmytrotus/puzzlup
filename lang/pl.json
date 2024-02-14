@@ -1,0 +1,5 @@
+{
+    "the_temperature_is_saved": "Temperatura jest zapisana",
+    "temperature_notification": "Powiadomienie o temperaturze",
+    "the_temperature_email_warning_text": "Uwaga!!! Temperatura na urządzeniu z numerem :deviceId spadła do :temperature stopni"
+}

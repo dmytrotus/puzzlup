@@ -1,0 +1,1 @@
+{{ __('the_temperature_email_warning_text', ['deviceId' => $deviceId, 'temperature' => $temperature]) }}

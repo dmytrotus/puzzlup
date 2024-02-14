@@ -1,0 +1,5 @@
+{
+    "the_temperature_is_saved": "The temperature is saved",
+    "temperature_notification": "Temperature notification",
+    "the_temperature_email_warning_text": "Attention!!! The temperature on the device with :deviceId has dropped to :temperature degrees"
+}
