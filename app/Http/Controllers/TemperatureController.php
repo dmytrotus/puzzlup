@@ -15,7 +15,11 @@ class TemperatureController extends Controller
 
     public function saveTemperature(ThermostatRequest $request): JsonResponse
     {
-        return $this->thermostatService->saveData($request->validated());
+        $this->thermostatService->saveData($request->validated());
+
+        return response()->json([
+            'message' => __('the_temperature_is_saved')
+        ]);
     }
 
     // public function getReportByDate();

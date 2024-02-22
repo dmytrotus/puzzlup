@@ -2,36 +2,23 @@
 
 namespace App\Services;
 
-use Illuminate\Http\JsonResponse;
-use App\Models\Temperature;
-use App\Mail\TemperatureNotification;
-use Illuminate\Support\Facades\Mail;
 use App\Services\TemperatureObserver;
+use App\Repositories\TemperatureRepository;
 use App\Interfaces\ThermostatInterface;
 
 class ThermostatService implements ThermostatInterface
 {
-    private $minTemp = 15;
+    public function __construct(
+        private TemperatureObserver $temperatureObserver,
+        private TemperatureRepository $temperatureRepository
+    ) {
+    }
 
-    public function saveData(array $data): JsonResponse
+    public function saveData(array $data): bool
     {
-        $deviceId = $data['device_id'];
-        $temperature = (int) $data['temperature'];
-        $date = $data['date'];
+        $this->temperatureObserver->observe($data);
+        $this->temperatureRepository->create($data);
 
-        if ($temperature < $this->minTemp) {
-            $this->observer = new TemperatureObserver($deviceId, $temperature);
-            $this->observer->sendNotification();
-        }
-
-        Temperature::create([
-            'device_id' => $deviceId,
-            'temperature' => $temperature,
-            'date' => $date
-        ]);
-
-        return response()->json([
-            'message' => __('the_temperature_is_saved')
-        ]);
+        return true;
     }
 }

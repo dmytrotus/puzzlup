@@ -6,5 +6,5 @@ use Illuminate\Http\JsonResponse;
 
 interface ThermostatInterface
 {
-    public function saveData(array $data): JsonResponse;
+    public function saveData(array $data): bool;
 }
