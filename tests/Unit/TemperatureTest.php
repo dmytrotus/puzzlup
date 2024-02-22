@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TemperatureNotification;
 use Illuminate\Http\JsonResponse;
+use App\Services\TemperatureObserver;
+use App\Repositories\TemperatureRepository;
 
 class TemperatureTest extends TestCase
 {
@@ -17,6 +19,10 @@ class TemperatureTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->temperatureObserver = new TemperatureObserver();
+        $this->temperatureRepository = new TemperatureRepository();
+        $this->thermostatService = new ThermostatService($this->temperatureObserver, $this->temperatureRepository);
 
         $this->dataGoodTemperature = [
             'device_id' => fake()->isbn10(),
@@ -33,8 +39,7 @@ class TemperatureTest extends TestCase
 
     public function test_that_data_from_thermostat_is_stored_to_the_database(): void
     {
-        $thermostatService = new ThermostatService();
-        $thermostatService->saveData($this->dataGoodTemperature);
+        $this->thermostatService->saveData($this->dataGoodTemperature);
 
         $castedDate = Carbon::createFromFormat('d-m-Y H:i:s', $this->dataGoodTemperature['date'])
                         ->format('Y-m-d H:i:s');
@@ -53,9 +58,8 @@ class TemperatureTest extends TestCase
         Mail::fake();
         $data = $this->dataGoodTemperature;
 
-        $thermostatService = new ThermostatService();
-        $response = $thermostatService->saveData($data);
-        $this->assertInstanceOf(JsonResponse::class, $response);
+        $response = $this->thermostatService->saveData($data);
+        $this->assertTrue($response);
 
         Mail::assertNothingQueued();
     }
@@ -65,9 +69,8 @@ class TemperatureTest extends TestCase
         Mail::fake();
         $data = $this->dataBadTemperature;
 
-        $thermostatService = new ThermostatService();
-        $response = $thermostatService->saveData($data);
-        $this->assertInstanceOf(JsonResponse::class, $response);
+        $response = $this->thermostatService->saveData($data);
+        $this->assertTrue($response);
 
         Mail::assertQueued(TemperatureNotification::class, function ($mail) use ($data) {
             return $mail->deviceId === $data['device_id'] &&
