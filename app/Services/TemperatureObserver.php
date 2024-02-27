@@ -8,10 +8,10 @@ use App\Interfaces\TemperatureObserverInterface;
 
 class TemperatureObserver implements TemperatureObserverInterface
 {
-    private $minTemp = 15;
-    private $adminMail = 'myemail@example.com';
-    private string $deviceId;
-    private int $temperature;
+    private const MIN_TEMP = 15;
+    private const ADMIN_EMAIL = 'myemail@example.com';
+    private readonly string $deviceId;
+    private readonly int $temperature;
 
 
     public function observe(array $data)
@@ -19,14 +19,14 @@ class TemperatureObserver implements TemperatureObserverInterface
         $this->deviceId = $data['device_id'];
         $this->temperature = (int) $data['temperature'];
 
-        if ($this->temperature < $this->minTemp) {
+        if ($this->temperature < TemperatureObserver::MIN_TEMP) {
             $this->sendNotification();
         }
     }
 
     public function sendNotification(): void
     {
-        Mail::to($this->adminMail)
+        Mail::to(TemperatureObserver::ADMIN_EMAIL)
             ->queue(new TemperatureNotification($this->deviceId, $this->temperature));
     }
 }

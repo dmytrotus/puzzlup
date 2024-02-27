@@ -6,7 +6,7 @@ use App\Services\TemperatureObserver;
 use App\Repositories\TemperatureRepository;
 use App\Interfaces\ThermostatInterface;
 
-class ThermostatService implements ThermostatInterface
+final class ThermostatService implements ThermostatInterface
 {
     public function __construct(
         private TemperatureObserver $temperatureObserver,
