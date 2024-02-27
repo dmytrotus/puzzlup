@@ -13,8 +13,7 @@ class TemperatureObserver implements TemperatureObserverInterface
     private readonly string $deviceId;
     private readonly int $temperature;
 
-
-    public function observe(array $data)
+    public function __invoke(array $data)
     {
         $this->deviceId = $data['device_id'];
         $this->temperature = (int) $data['temperature'];

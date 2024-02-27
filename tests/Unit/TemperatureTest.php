@@ -20,9 +20,8 @@ class TemperatureTest extends TestCase
     {
         parent::setUp();
 
-        $this->temperatureObserver = new TemperatureObserver();
         $this->temperatureRepository = new TemperatureRepository();
-        $this->thermostatService = new ThermostatService($this->temperatureObserver, $this->temperatureRepository);
+        $this->thermostatService = new ThermostatService($this->temperatureRepository);
 
         $this->dataGoodTemperature = [
             'device_id' => fake()->isbn10(),

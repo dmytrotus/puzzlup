@@ -2,22 +2,21 @@
 
 namespace App\Services;
 
-use App\Services\TemperatureObserver;
 use App\Repositories\TemperatureRepository;
 use App\Interfaces\ThermostatInterface;
+use Illuminate\Support\Facades\Event;
 
 final class ThermostatService implements ThermostatInterface
 {
     public function __construct(
-        private TemperatureObserver $temperatureObserver,
         private TemperatureRepository $temperatureRepository
     ) {
     }
 
     public function saveData(array $data): bool
     {
-        $this->temperatureObserver->observe($data);
         $this->temperatureRepository->create($data);
+        Event::dispatch('temperature.saved', [$data]);
 
         return true;
     }
